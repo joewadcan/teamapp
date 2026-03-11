@@ -2,8 +2,8 @@
 
 ## Import into Replit
 
-In GitHub: Fork the repo for your team.
-In Replit: **Create Repl → Import from GitHub** → paste your fork's URL.
+- In Replit: **Create Repl → Import from GitHub** → paste your team's repo URL.
+- Ensure that you're working on branches in Replit, so you don't push to main. 
 
 
 ## Development Workflow Reminder
