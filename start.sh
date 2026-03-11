@@ -1,5 +1,3 @@
 #!/bin/bash
-# Start backend server
-cd server && node server.js &
-# Start frontend dev server
-cd client && npm run dev
+(cd server && node server.js) &
+(cd client && npm run dev)
