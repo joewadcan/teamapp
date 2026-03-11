@@ -1,21 +1,23 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const pool = require('./db/pool');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 
 // ─── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json());
 
+// ─── Serve React build ────────────────────────────────────────────────────────
+const clientDist = path.join(__dirname, '..', 'client', 'dist');
+app.use(express.static(clientDist));
+
 // ─── Health Check ──────────────────────────────────────────────────────────────
-// This is the only route in the starter. Build your own routes below (or in
-// separate route files that you require() here).
 app.get('/api/health', async (req, res) => {
   try {
-    // Also verify the database connection is alive
     await pool.query('SELECT 1');
     res.json({
       status: 'ok',
@@ -41,8 +43,13 @@ app.get('/api/health', async (req, res) => {
 //
 // See the assignment doc for what routes your app needs.
 
+// ─── Catch-all: serve React app for any non-API route ─────────────────────────
+app.get('*', (req, res) => {
+  res.sendFile(path.join(clientDist, 'index.html'));
+});
+
 // ─── Start Server ──────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Health check: http://localhost:${PORT}/api/health`);
 });
