@@ -5,7 +5,6 @@ const path = require('path');
 const pool = require('./db/pool');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 // ─── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors());
@@ -48,8 +47,12 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(clientDist, 'index.html'));
 });
 
-// ─── Start Server ──────────────────────────────────────────────────────────────
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Health check: http://localhost:${PORT}/api/health`);
+// ─── Start Server on both ports ───────────────────────────────────────────────
+// Port 3001 → external port 80 (Replit's default preview URL)
+// Port 5000 → webview workflow port
+const PORTS = [3001, 5000];
+PORTS.forEach((port) => {
+  app.listen(port, '0.0.0.0', () => {
+    console.log(`Server listening on port ${port}`);
+  });
 });
